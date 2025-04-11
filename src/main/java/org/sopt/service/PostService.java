@@ -15,10 +15,8 @@ public class PostService {
         if(postRepository.ExistedTitle(title))
             throw new IllegalArgumentException("중복된 제목을 가진 게시물이 존재합니다.");
 
-        LocalDateTime threeMinutesAgo = LocalDateTime.now().minusMinutes(3);
-        if(recentCreatedTime != null && threeMinutesAgo.isBefore(recentCreatedTime))
+        if(!postTimeCheck(recentCreatedTime))
             throw new IllegalStateException("최근 게시물을 작성한지 3분이 지나지 않았습니다.");
-
         int postId = IdGenerator.generateId();
         Post post = new Post(postId, title);
 
@@ -44,5 +42,12 @@ public class PostService {
 
     public List<Post> searchPostsByKeyword(String keyword) {
         return postRepository.search(keyword);
+    }
+
+    private Boolean postTimeCheck(LocalDateTime recentCreatedTime) {
+        LocalDateTime threeMinutesAgo = LocalDateTime.now().minusMinutes(3);
+        if(recentCreatedTime != null && threeMinutesAgo.isBefore(recentCreatedTime))
+            return false;
+        return true;
     }
 }
