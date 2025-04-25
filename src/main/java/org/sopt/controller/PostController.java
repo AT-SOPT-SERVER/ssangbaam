@@ -1,39 +1,48 @@
 package org.sopt.controller;
 
-import org.sopt.domain.Post;
+import org.sopt.dto.request.PostCreateRequest;
+import org.sopt.dto.request.PostPatchRequest;
 import org.sopt.service.PostService;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
-import java.util.List;
-
+@RestController
 public class PostController {
-    private PostService postService = new PostService();
+    private final PostService postService;
 
-    public void createPost(String title) {
-        try {
-            postService.createdPost(title);
-        } catch(IllegalArgumentException e) {
-            System.out.println(e.getMessage());
-        }
+    public PostController(PostService postService) {
+        this.postService = postService;
     }
 
-    public List<Post> getAllPosts() {
-        return postService.getAllPosts();
+    @PostMapping("/post")
+    public ResponseEntity<?> createPost(@RequestBody PostCreateRequest request) {
+        return ResponseEntity.created(postService.createdPost(request)).build();
     }
 
-    public Post getPostById(int id) {
-        return postService.getPostById(id);
+    @GetMapping("/posts")
+    public ResponseEntity<?> getAllPosts() {
+        return ResponseEntity.ok(postService.getAllPosts());
     }
 
-    public boolean deletePostById(int id) {
-        return postService.deletePostById(id);
+    @GetMapping("/post/{postId}")
+    public ResponseEntity<?> getPostById(@PathVariable Long postId) {
+        return ResponseEntity.ok(postService.getPostById(postId));
     }
 
-    public boolean updatePostTitle(int updateId, String newTitle) {
-        return postService.updatePostTitle(updateId, newTitle);
+    @DeleteMapping("/post/{postId}")
+    public ResponseEntity<?> deletePostById(@PathVariable Long postId) {
+        postService.deletePostById(postId);
+
+        return ResponseEntity.noContent().build();
     }
 
-    public List<Post> searchPostsByKeyword(String keyword) {
-        return postService.searchPostsByKeyword(keyword);
+    @PatchMapping("/post/{postId}")
+    public ResponseEntity<?> updatePostTitle(@PathVariable Long postId, @RequestBody PostPatchRequest request) {
+        return ResponseEntity.ok(postService.updatePostTitle(postId, request));
+    }
+
+    @GetMapping(value = "/posts", params = "keyword")
+    public ResponseEntity<?> searchPostsByKeyword(@RequestParam String keyword) {
+        return ResponseEntity.ok(postService.searchPostsByKeyword(keyword));
     }
 }
