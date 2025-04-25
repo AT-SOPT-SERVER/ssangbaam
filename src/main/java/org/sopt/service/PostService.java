@@ -1,5 +1,6 @@
 package org.sopt.service;
 
+import jakarta.transaction.Transactional;
 import org.sopt.domain.Post;
 import org.sopt.dto.request.PostCreateRequest;
 import org.sopt.dto.request.PostPatchRequest;
@@ -20,6 +21,7 @@ public class PostService {
         this.postRepository = postRepository;
     }
 
+    @Transactional
     public URI createdPost(PostCreateRequest request) {
         LocalDateTime recentCreatedTime = null;
 
@@ -37,6 +39,7 @@ public class PostService {
         return URI.create("/post/" + post.getId());
     }
 
+    @Transactional
     public PostListResponse getAllPosts() {
         List<PostResponse> postList = postRepository.findAll()
                 .stream()
@@ -46,18 +49,21 @@ public class PostService {
         return PostListResponse.of(postList);
     }
 
+    @Transactional
     public PostResponse getPostById(Long postId) {
         Post post = getPost(postId);
 
         return PostResponse.from(post);
     }
 
+    @Transactional
     public void deletePostById(Long id) {
         Post post = getPost(id);
 
         postRepository.delete(post);
     }
 
+    @Transactional
     public PostResponse updatePostTitle(Long postId, PostPatchRequest request) {
         Post post = getPost(postId);
 
@@ -65,6 +71,7 @@ public class PostService {
         return PostResponse.from(post);
     }
 
+    @Transactional
     public PostListResponse searchPostsByKeyword(String keyword) {
         List<PostResponse> postList = postRepository.findByTitleContaining(keyword).stream()
                 .map(PostResponse::from)
