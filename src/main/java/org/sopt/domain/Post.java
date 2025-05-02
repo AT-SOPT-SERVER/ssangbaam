@@ -1,9 +1,9 @@
 package org.sopt.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+
+import jakarta.persistence.*;
+
+import java.time.LocalDateTime;
 
 @Entity
 public class Post {
@@ -12,15 +12,25 @@ public class Post {
     private Long id;
     private String title;
 
+    private String content;
+
+    private LocalDateTime createdAt;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
     public Post() {
 
     }
 
-    public Post(String title) {
+    public Post(String title, String content, User user) {
         blankTitle(title);
         maxLengthTitle(title);
-
         this.title = title;
+        this.content = content;
+        this.user = user;
+        this.createdAt = LocalDateTime.now();
     }
 
     public Long getId() {
@@ -31,8 +41,21 @@ public class Post {
         return this.title;
     }
 
+    public String getContent() {
+        return content;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
     public void updateTitle(String title) {
         this.title = title;
+    }
+
+    public void updateTitleAndContent(String title, String content) {
+        this.title = title;
+        this.content = content;
     }
 
     private void blankTitle(String title) {

@@ -14,9 +14,12 @@ public class PostController {
         this.postService = postService;
     }
 
-    @PostMapping("/post")
-    public ResponseEntity<?> createPost(@RequestBody PostCreateRequest request) {
-        return ResponseEntity.created(postService.createdPost(request)).build();
+    @PostMapping("/posts")
+    public ResponseEntity<?> createPost(
+            @RequestHeader Long userId,
+            @RequestBody PostCreateRequest request
+    ) {
+        return ResponseEntity.created(postService.createdPost(request, userId)).build();
     }
 
     @GetMapping("/posts")
@@ -30,15 +33,22 @@ public class PostController {
     }
 
     @DeleteMapping("/post/{postId}")
-    public ResponseEntity<?> deletePostById(@PathVariable Long postId) {
-        postService.deletePostById(postId);
+    public ResponseEntity<?> deletePostById(
+            @RequestHeader Long userId,
+            @PathVariable Long postId
+    ) {
+        postService.deletePostById(postId, userId);
 
         return ResponseEntity.noContent().build();
     }
 
     @PatchMapping("/post/{postId}")
-    public ResponseEntity<?> updatePostTitle(@PathVariable Long postId, @RequestBody PostPatchRequest request) {
-        return ResponseEntity.ok(postService.updatePostTitle(postId, request));
+    public ResponseEntity<?> updatePost(
+            @RequestHeader Long userId,
+            @PathVariable Long postId,
+            @RequestBody PostPatchRequest request
+    ) {
+        return ResponseEntity.ok(postService.updatePost(userId,postId, request));
     }
 
     @GetMapping(value = "/posts", params = "keyword")

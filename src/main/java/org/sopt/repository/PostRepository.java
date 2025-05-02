@@ -11,4 +11,6 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     List<Post> findByTitleContaining(String keyword);
 
     boolean existsByTitle(String title);
+
+    List<Post> findAllByOrderByCreatedAtDesc();
 }

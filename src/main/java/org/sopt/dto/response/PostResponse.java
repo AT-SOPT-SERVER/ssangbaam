@@ -3,10 +3,10 @@ package org.sopt.dto.response;
 import org.sopt.domain.Post;
 
 public record PostResponse(
-        Long postId,
-        String title
+        String title,
+        String userName
 ) {
     public static PostResponse from(Post post) {
-        return new PostResponse(post.getId(), post.getTitle());
+        return new PostResponse(post.getTitle(), post.getUser().getName());
     }
 }
