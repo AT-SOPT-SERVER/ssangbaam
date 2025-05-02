@@ -62,7 +62,7 @@ public class PostService {
         Post post = getPost(id);
         User currentUser = userService.getUserById(userId);
 
-        if(currentUser == post.getUser()) {
+        if(currentUser != post.getUser()) {
             throw new IllegalArgumentException("삭제할 권한이 없는 사용자입니다.");
         }
         postRepository.delete(post);
@@ -72,7 +72,7 @@ public class PostService {
         User currentUser = userService.getUserById(userId);
         Post post = getPost(postId);
 
-        if(currentUser == post.getUser()) {
+        if(currentUser != post.getUser()) {
             throw new IllegalArgumentException("수정할 권한이 없는 사용자입니다.");
         }
 
