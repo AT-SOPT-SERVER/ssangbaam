@@ -35,7 +35,15 @@ public class User {
     }
 
     public User(String name, String email) {
+        validateName(name);
+
         this.name = name;
         this.email = email;
+    }
+
+    private void validateName(String name) {
+        if(name.length() > 10) {
+            throw new IllegalArgumentException("유저 이름이 10글자 이상입니다.");
+        }
     }
 }
