@@ -2,6 +2,7 @@ package org.sopt.domain;
 
 
 import jakarta.persistence.*;
+import org.sopt.global.Constant;
 
 import java.time.LocalDateTime;
 
@@ -66,12 +67,12 @@ public class Post {
     }
 
     private void maxLengthTitle(String title) {
-        if(title.length() > 30)
+        if(title.length() > Constant.MAX_POST_TITLE_LENGTH)
             throw new IllegalArgumentException("제목이 30자 이상입니다.");
     }
 
     private void validateContentLength(String content) {
-        if (content.length() > 1000)
+        if (content.length() > Constant.MAX_POST_CONTENT_LENGTH)
             throw new IllegalArgumentException("내용이 1000자 이상입니다.");
     }
 }

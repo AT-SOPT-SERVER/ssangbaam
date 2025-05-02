@@ -1,6 +1,7 @@
 package org.sopt.domain;
 
 import jakarta.persistence.*;
+import org.sopt.global.Constant;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +43,7 @@ public class User {
     }
 
     private void validateName(String name) {
-        if(name.length() > 10) {
+        if(name.length() > Constant.MAX_USER_NAME_LENGTH) {
             throw new IllegalArgumentException("유저 이름이 10글자 이상입니다.");
         }
     }
