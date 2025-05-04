@@ -3,17 +3,17 @@ package org.sopt.service;
 import jakarta.transaction.Transactional;
 import org.sopt.domain.Post;
 import org.sopt.domain.User;
-import org.sopt.dto.request.PostCreateRequest;
-import org.sopt.dto.request.PostPatchRequest;
-import org.sopt.dto.response.PostDetailResponse;
-import org.sopt.dto.response.PostListResponse;
-import org.sopt.dto.response.PostResponse;
+import org.sopt.dto.request.post.PostCreateRequest;
+import org.sopt.dto.request.post.PostPatchRequest;
+import org.sopt.dto.response.post.PostDetailResponse;
+import org.sopt.dto.response.post.PostListResponse;
+import org.sopt.dto.response.post.PostResponse;
+import org.sopt.exception.CustomException;
 import org.sopt.repository.PostRepository;
-import org.sopt.repository.UserRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.net.URI;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -31,7 +31,7 @@ public class PostService {
         User currentUser = userService.getUserById(userId);
 
         if(postRepository.existsByTitle(request.title()))
-            throw new IllegalArgumentException("중복된 제목을 가진 게시물이 존재합니다.");
+            throw new CustomException(HttpStatus.CONFLICT, "중복된 제목을 가진 게시물이 존재합니다.");
 
         Post post = new Post(request.title(), request.title(), currentUser);
 
@@ -63,7 +63,7 @@ public class PostService {
         User currentUser = userService.getUserById(userId);
 
         if(currentUser != post.getUser()) {
-            throw new IllegalArgumentException("삭제할 권한이 없는 사용자입니다.");
+            throw new CustomException(HttpStatus.FORBIDDEN, "삭제할 권한이 없는 사용자입니다.");
         }
         postRepository.delete(post);
     }
@@ -73,7 +73,7 @@ public class PostService {
         Post post = getPost(postId);
 
         if(currentUser != post.getUser()) {
-            throw new IllegalArgumentException("수정할 권한이 없는 사용자입니다.");
+            throw new CustomException(HttpStatus.FORBIDDEN, "수정할 권한이 없는 사용자입니다.");
         }
 
         post.updateTitleAndContent(request.title(), request.content());
@@ -91,6 +91,6 @@ public class PostService {
 
     private Post getPost(Long postId) {
         return postRepository.findById(postId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다."));
+                .orElseThrow(() -> new CustomException(HttpStatus.NOT_FOUND, "해당 게시글이 없습니다."));
     }
 }

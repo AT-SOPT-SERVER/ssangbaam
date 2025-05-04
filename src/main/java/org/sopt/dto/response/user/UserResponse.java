@@ -1,4 +1,4 @@
-package org.sopt.dto.response;
+package org.sopt.dto.response.user;
 
 import org.sopt.domain.User;
 

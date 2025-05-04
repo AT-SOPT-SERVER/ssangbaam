@@ -1,6 +1,5 @@
-package org.sopt.global;
+package org.sopt.exception;
 
-import org.sopt.dto.response.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -10,10 +9,11 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class GlobalExceptionHandler {
     public GlobalExceptionHandler() {
     }
-    @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<ErrorResponse> handleIllegalArgument(IllegalArgumentException e) {
-        ErrorResponse error = ErrorResponse.of(HttpStatus.BAD_REQUEST, e.getMessage());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+
+    @ExceptionHandler(CustomException.class)
+    public ResponseEntity<ErrorResponse> handleApiException(CustomException e) {
+        return ResponseEntity.status(e.getStatus())
+                .body(ErrorResponse.of(e.getStatus(), e.getMessage()));
     }
 
     @ExceptionHandler(Exception.class)

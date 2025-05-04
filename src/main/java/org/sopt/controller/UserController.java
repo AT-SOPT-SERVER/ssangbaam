@@ -1,6 +1,6 @@
 package org.sopt.controller;
 
-import org.sopt.dto.request.UserCreateRequest;
+import org.sopt.dto.request.user.UserCreateRequest;
 import org.sopt.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

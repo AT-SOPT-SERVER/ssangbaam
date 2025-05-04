@@ -1,4 +1,4 @@
-package org.sopt.dto.request;
+package org.sopt.dto.request.user;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

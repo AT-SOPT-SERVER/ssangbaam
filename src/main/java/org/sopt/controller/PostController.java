@@ -1,7 +1,7 @@
 package org.sopt.controller;
 
-import org.sopt.dto.request.PostCreateRequest;
-import org.sopt.dto.request.PostPatchRequest;
+import org.sopt.dto.request.post.PostCreateRequest;
+import org.sopt.dto.request.post.PostPatchRequest;
 import org.sopt.service.PostService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
